@@ -1,29 +1,28 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "shell.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-	char *line;
-	size_t len;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t nread;
+	int line_count = 0;
 
-	line = NULL;
-	len = 0;
+	(void)argc;
 
 	while (1)
 	{
-		printf("#cisfun$ ");
-		fflush(stdout);
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "($) ", 4);
 
-		if (getline(&line, &len, stdin) == -1)
-		{
-			printf("\n");
+		nread = getline(&line, &len, stdin);
+		if (nread == -1)
 			break;
-		}
 
-		line[strcspn(line, "\n")] = '\0';
-		execute_command(line);
+		line_count++;
+		line[nread - 1] = '\0';
+
+		if (line[0] != '\0')
+			run_command(line, argv[0], line_count);
 	}
 
 	free(line);
