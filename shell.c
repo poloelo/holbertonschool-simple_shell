@@ -3,7 +3,10 @@
 void run_command(char *cmd, char *prog_name, int line)
 {
 	pid_t pid;
-	char *args[] = {cmd, NULL};
+	char *args[2];
+
+	args[0] = cmd;
+	args[1] = NULL;
 
 	pid = fork();
 	if (pid == 0)
