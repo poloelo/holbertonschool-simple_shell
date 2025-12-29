@@ -1,0 +1,47 @@
+
+---
+
+## 2️⃣ Man page (man_1_simple_shell)
+
+👉 Objectif : permettre `man ./man_1_simple_shell`
+
+📄 **`man_1_simple_shell`**
+
+```man
+.TH SIMPLE_SHELL 1 "December 2025" "Holberton School" "Simple Shell Manual"
+
+.SH NAME
+simple_shell \- simple UNIX command interpreter
+
+.SH SYNOPSIS
+.B hsh
+
+.SH DESCRIPTION
+Simple Shell est un interpréteur de commandes UNIX minimal.
+Il permet d’exécuter des commandes entrées par l’utilisateur
+en utilisant les appels système UNIX standards.
+
+Le shell fonctionne en mode interactif et non interactif.
+
+.SH USAGE
+Interactive mode:
+.RS
+./hsh
+.RE
+
+Non-interactive mode:
+.RS
+echo "/bin/ls" | ./hsh
+.RE
+
+.SH EXIT STATUS
+Retourne 0 en cas de succès.
+Retourne un code d’erreur approprié en cas d’échec.
+
+.SH ENVIRONMENT
+PATH
+Utilisé pour localiser les exécutables.
+
+.SH AUTHORS
+Paul Gioria  
+Ndeye Fatou Samb
