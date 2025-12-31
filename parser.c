@@ -1,22 +1,33 @@
+#include <stdlib.h>
+#include <string.h>
 #include "shell.h"
 
+/**
+ * parse_line - split a command line into arguments
+ * @line: input string
+ *
+ * Return: array of strings (argv)
+ */
 char **parse_line(char *line)
 {
-	char **args;
+	char **argv;
 	char *token;
-	int i = 0;
+	int i;
 
-	args = malloc(sizeof(char *) * 64);
-	if (!args)
+	argv = malloc(sizeof(char *) * 64);
+	if (argv == NULL)
 		return (NULL);
 
-	token = strtok(line, " \t\n");
-	while (token)
-	{
-		args[i++] = token;
-		token = strtok(NULL, " \t\n");
-	}
-	args[i] = NULL;
+	token = strtok(line, " ");
+	i = 0;
 
-	return (args);
+	while (token != NULL)
+	{
+		argv[i] = token;
+		token = strtok(NULL, " ");
+		i++;
+	}
+
+	argv[i] = NULL;
+	return (argv);
 }
