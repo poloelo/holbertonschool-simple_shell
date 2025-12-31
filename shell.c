@@ -1,25 +1,41 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 #include "shell.h"
 
-void run_command(char *cmd, char *prog_name, int line)
+extern char **environ;
+
+/**
+ * run_command - read and execute commands
+ *
+ * Return: Nothing
+ */
+void run_command(void)
 {
-	pid_t pid;
-	char *args[2];
+	char *line;
+	size_t len;
 
-	args[0] = cmd;
-	args[1] = NULL;
+	line = NULL;
+	len = 0;
 
-	pid = fork();
-	if (pid == 0)
+	while (1)
 	{
-		if (execve(cmd, args, environ) == -1)
+		write(STDOUT_FILENO, "#cisfun$ ", 9);
+
+		if (getline(&line, &len, stdin) == -1)
 		{
-			fprintf(stderr, "%s: %d: %s: not found\n",
-				prog_name, line, cmd);
-			exit(127);
+			write(STDOUT_FILENO, "\n", 1);
+			break;
 		}
+
+		line[strcspn(line, "\n")] = '\0';
+
+		if (line[0] == '\0')
+			continue;
+
+		execute_command(line, environ);
 	}
-	else
-	{
-		wait(NULL);
-	}
+
+	free(line);
 }
