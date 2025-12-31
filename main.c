@@ -1,28 +1,45 @@
 #include "shell.h"
 
-int main(int argc, char **argv)
+/**
+ * main - Entry point for simple shell
+ * @ac: Argument count
+ * @av: Argument vector
+ * @env: Environment variables
+ *
+ * Description: This function initializes and runs a simple shell program
+ * that reads commands from the user and executes them.
+ *
+ * Return: Always 0 (Success)
+ */
+int main(int ac, char **av, char **env)
 {
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t nread;
-	int line_count = 0;
+	int interactive = isatty(STDIN_FILENO);
 
-	(void)argc;
+	(void)ac;
+	(void)av;
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			write(STDOUT_FILENO, "($) ", 4);
+		if (interactive)
+			write(STDOUT_FILENO, "$ ", 2);
 
 		nread = getline(&line, &len, stdin);
+
 		if (nread == -1)
+		{
+			if (interactive)
+				write(STDOUT_FILENO, "\n", 1);
 			break;
+		}
 
-		line_count++;
-		line[nread - 1] = '\0';
+		if (line[nread - 1] == '\n')
+			line[nread - 1] = '\0';
 
-		if (line[0] != '\0')
-			run_command(line, argv[0], line_count);
+		if (_strlen(line) > 0)
+			execute_command(line, env);
 	}
 
 	free(line);
