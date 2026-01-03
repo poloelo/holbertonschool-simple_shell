@@ -54,7 +54,6 @@ char *find_in_path(char *command)
 			free(path_copy);
 			return (NULL);
 		}
-
 		full_path[0] = '\0';
 		_strcat(full_path, token);
 		_strcat(full_path, "/");
@@ -69,7 +68,6 @@ char *find_in_path(char *command)
 		free(full_path);
 		token = strtok(NULL, ":");
 	}
-
 	free(path_copy);
 	return (NULL);
 }
