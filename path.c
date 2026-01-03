@@ -1,61 +1,75 @@
 #include "shell.h"
 
 /**
- * execute_command - Execute a command
- * @args: Array of arguments
- * @shell_name: Name of the shell (argv[0])
- * @line_count: Current line number
+ * get_path_env - Get PATH environment variable
  *
- * Return: Status of execution
+ * Return: Pointer to PATH string, or NULL
  */
-int execute_command(char **args, char *shell_name, int line_count)
+char *get_path_env(void)
 {
-	pid_t pid;
-	int status;
-	char *command = NULL;
-	struct stat st;
+	int i = 0;
 
-	if (args[0][0] == '/' || args[0][0] == '.')
-		command = args[0];
-	else
-		command = find_in_path(args[0]);
-
-	if (command == NULL || stat(command, &st) != 0)
+	while (environ[i] != NULL)
 	{
-		print_error(shell_name, line_count, args[0]);
-		if (command != NULL && command != args[0])
-			free(command);
-		return (127);
-	}
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		if (command != args[0])
-			free(command);
-		return (1);
-	}
-
-	if (pid == 0)
-	{
-		if (execve(command, args, environ) == -1)
+		if (environ[i][0] == 'P' && environ[i][1] == 'A' &&
+		    environ[i][2] == 'T' && environ[i][3] == 'H' &&
+		    environ[i][4] == '=')
 		{
-			perror(shell_name);
-			if (command != args[0])
-				free(command);
-			exit(127);
+			return (environ[i] + 5);
 		}
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (command != args[0])
-			free(command);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
+		i++;
 	}
 
-	return (0);
+	return (NULL);
 }
 
+/**
+ * find_in_path - Find command in PATH
+ * @command: Command to find
+ *
+ * Return: Full path to command, or NULL if not found
+ */
+char *find_in_path(char *command)
+{
+	char *path_env, *path_copy, *token, *full_path;
+	struct stat st;
+	int cmd_len, dir_len;
+
+	path_env = get_path_env();
+	if (path_env == NULL)
+		return (NULL);
+
+	path_copy = _strdup(path_env);
+	if (path_copy == NULL)
+		return (NULL);
+
+	token = strtok(path_copy, ":");
+	while (token != NULL)
+	{
+		dir_len = _strlen(token);
+		cmd_len = _strlen(command);
+		full_path = malloc(dir_len + cmd_len + 2);
+		if (full_path == NULL)
+		{
+			free(path_copy);
+			return (NULL);
+		}
+
+		full_path[0] = '\0';
+		_strcat(full_path, token);
+		_strcat(full_path, "/");
+		_strcat(full_path, command);
+
+		if (stat(full_path, &st) == 0)
+		{
+			free(path_copy);
+			return (full_path);
+		}
+
+		free(full_path);
+		token = strtok(NULL, ":");
+	}
+
+	free(path_copy);
+	return (NULL);
+}

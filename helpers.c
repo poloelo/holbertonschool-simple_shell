@@ -1,61 +1,54 @@
 #include "shell.h"
 
 /**
- * execute_command - Execute a command
- * @args: Array of arguments
- * @shell_name: Name of the shell (argv[0])
- * @line_count: Current line number
- *
- * Return: Status of execution
+ * print_error - Print error message
+ * @shell_name: Name of the shell
+ * @line_count: Line number
+ * @command: Command that failed
  */
-int execute_command(char **args, char *shell_name, int line_count)
+void print_error(char *shell_name, int line_count, char *command)
 {
-	pid_t pid;
-	int status;
-	char *command = NULL;
-	struct stat st;
+	int num, temp, divisor = 1;
 
-	if (args[0][0] == '/' || args[0][0] == '.')
-		command = args[0];
-	else
-		command = find_in_path(args[0]);
+	write(STDERR_FILENO, shell_name, _strlen(shell_name));
+	write(STDERR_FILENO, ": ", 2);
 
-	if (command == NULL || stat(command, &st) != 0)
+	/* Convert line_count to string */
+	temp = line_count;
+	while (temp / 10 != 0)
 	{
-		print_error(shell_name, line_count, args[0]);
-		if (command != NULL && command != args[0])
-			free(command);
-		return (127);
+		divisor *= 10;
+		temp /= 10;
 	}
 
-	pid = fork();
-	if (pid == -1)
+	while (divisor > 0)
 	{
-		perror("fork");
-		if (command != args[0])
-			free(command);
-		return (1);
+		num = (line_count / divisor) % 10;
+		write(STDERR_FILENO, &"0123456789"[num], 1);
+		divisor /= 10;
 	}
 
-	if (pid == 0)
-	{
-		if (execve(command, args, environ) == -1)
-		{
-			perror(shell_name);
-			if (command != args[0])
-				free(command);
-			exit(127);
-		}
-	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (command != args[0])
-			free(command);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-	}
-
-	return (0);
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, command, _strlen(command));
+	write(STDERR_FILENO, ": not found\n", 12);
 }
 
+/**
+ * free_array - Free array of strings
+ * @array: Array to free
+ */
+void free_array(char **array)
+{
+	int i = 0;
+
+	if (array == NULL)
+		return;
+
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+
+	free(array);
+}
