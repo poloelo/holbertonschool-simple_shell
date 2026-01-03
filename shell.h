@@ -16,6 +16,9 @@
 extern char **environ;
 
 /* Main shell functions */
+/* Main loop helpers */
+int handle_empty_line(char *line);
+int process_command(char *line, char **av, int line_count);
 void display_prompt(void);
 char *read_line(void);
 char **parse_line(char *line);
