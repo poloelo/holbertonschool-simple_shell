@@ -43,8 +43,8 @@ int check_builtin(char **args)
 {
 	int i;
 	char *builtins[] = {"exit", "env", NULL};
-	int (*builtin_funcs[])(char **) = {shell_exit, shell_env};
 
+	int (*builtin_funcs[])(char **) = {shell_exit, shell_env};
 	for (i = 0; builtins[i] != NULL; i++)
 	{
 		if (_strcmp(args[0], builtins[i]) == 0)
