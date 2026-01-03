@@ -38,4 +38,8 @@ char *_strdup(char *str);
 char *_strcat(char *dest, char *src);
 int _strlen(char *s);
 
+/* Command execution helpers */
+char *get_command_path(char **args);
+void execute_child(char *command, char **args, char *shell_name);
+
 #endif /* SHELL_H */
