@@ -8,8 +8,8 @@
  */
 int shell_exit(char **args)
 {
-    (void)args;
-    exit(0);
+	(void)args;
+	exit(0);
 }
 
 /**
@@ -20,18 +20,18 @@ int shell_exit(char **args)
  */
 int shell_env(char **args)
 {
-    int i = 0;
-    
-    (void)args;
-    
-    while (environ[i] != NULL)
-    {
-        write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
-        write(STDOUT_FILENO, "\n", 1);
-        i++;
-    }
-    
-    return (0);
+	int i = 0;
+
+	(void)args;
+
+	while (environ[i] != NULL)
+	{
+		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 1);
+		i++;
+	}
+
+	return (0);
 }
 
 /**
@@ -42,16 +42,16 @@ int shell_env(char **args)
  */
 int check_builtin(char **args)
 {
-    if (_strcmp(args[0], "exit") == 0)
-    {
-        shell_exit(args);  // Ne retourne jamais
-    }
-    
-    if (_strcmp(args[0], "env") == 0)
-    {
-        shell_env(args);
-        return (0);
-    }
-    
-    return (1);  // Pas un builtin
+	if (_strcmp(args[0], "exit") == 0)
+	{
+		shell_exit(args);
+	}
+
+	if (_strcmp(args[0], "env") == 0)
+	{
+		shell_env(args);
+		return (0);
+	}
+
+	return (1);
 }
