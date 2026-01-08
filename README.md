@@ -6,6 +6,8 @@ A simple UNIX command line interpreter written in C.
 
 This project is a simple implementation of a shell, a command-line interpreter that provides a user interface for the UNIX operating system. The shell reads commands from the user and executes them.
 
+[Flowchart.pdf](https://github.com/user-attachments/files/24496211/Flowchart.pdf)
+
 ## Features
 
 - Display a prompt and wait for user input
