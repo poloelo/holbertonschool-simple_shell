@@ -9,7 +9,7 @@
 int shell_exit(char **args)
 {
 	(void)args;
-	return (-1);
+	exit(0);
 }
 
 /**
