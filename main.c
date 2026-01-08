@@ -1,5 +1,12 @@
 #include "shell.h"
 
+/**
+ * main - Entry point for simple shell
+ * @ac: Argument count
+ * @av: Argument vector
+ *
+ * Return: 0 on success
+ */
 int main(int ac, char **av)
 {
     char *line = NULL;
@@ -38,15 +45,12 @@ int main(int ac, char **av)
             continue;
         }
 
-        status = check_builtin(args);
-        
-        if (status == 0)  // Builtin exécuté
+        if (check_builtin(args) == 0)
         {
             free_array(args);
             continue;
         }
 
-        // status == 1, pas un builtin → exécuter la commande
         status = execute_command(args, av[0], line_count);
         free_array(args);
     }
