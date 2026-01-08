@@ -1,15 +1,15 @@
 #include "shell.h"
 
 /**
- * shell_exit - Exit the shell
+ * shell_exit - Signal to exit the shell
  * @args: Array of arguments (unused)
  *
- * Return: Does not return
+ * Return: -1 to signal exit
  */
 int shell_exit(char **args)
 {
 	(void)args;
-	exit(last_status);  /* ← Quitte avec le dernier statut */
+	return (-1);
 }
 
 /**
@@ -38,14 +38,12 @@ int shell_env(char **args)
  * check_builtin - Check if command is a built-in and execute it
  * @args: Array of arguments
  *
- * Return: 0 if built-in was executed, 1 otherwise
+ * Return: -1 for exit, 0 if other builtin executed, 1 otherwise
  */
 int check_builtin(char **args)
 {
 	if (_strcmp(args[0], "exit") == 0)
-	{
-		shell_exit(args);
-	}
+		return (shell_exit(args));
 
 	if (_strcmp(args[0], "env") == 0)
 	{
