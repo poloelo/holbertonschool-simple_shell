@@ -1,3 +1,5 @@
+#include "shell.h"
+
 int main(int ac, char **av)
 {
     char *line = NULL;
@@ -37,12 +39,6 @@ int main(int ac, char **av)
         }
 
         status = check_builtin(args);
-        
-        if (status == -1)  // exit a été appelé
-        {
-            free_array(args);
-            exit(EXIT_SUCCESS);  // Quitter proprement
-        }
         
         if (status == 0)  // Builtin exécuté
         {
