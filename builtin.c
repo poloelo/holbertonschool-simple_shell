@@ -1,20 +1,20 @@
 #include "shell.h"
 
 /**
- * shell_exit - Signal to exit the shell
- * @args: Array of arguments
+ * shell_exit - Exit the shell
+ * @args: Array of arguments (unused)
  *
- * Return: -1 to signal exit to caller
+ * Return: Does not return
  */
 int shell_exit(char **args)
 {
     (void)args;
-    return (-1);  // NE PAS appeler exit() ici, juste retourner -1
+    exit(0);
 }
 
 /**
  * shell_env - Print environment variables
- * @args: Array of arguments
+ * @args: Array of arguments (unused)
  *
  * Return: 0 on success
  */
@@ -35,29 +35,22 @@ int shell_env(char **args)
 }
 
 /**
- * check_builtin - Check if command is a built-in
+ * check_builtin - Check if command is a built-in and execute it
  * @args: Array of arguments
  *
  * Return: 0 if built-in was executed, 1 otherwise
  */
 int check_builtin(char **args)
 {
-    int i;
-    int status;
-    char *builtins[] = {"exit", "env", NULL};
-    int (*builtin_funcs[])(char **) = {shell_exit, shell_env};
-    
-    for (i = 0; builtins[i] != NULL; i++)
+    if (_strcmp(args[0], "exit") == 0)
     {
-        if (_strcmp(args[0], builtins[i]) == 0)
-        {
-            status = builtin_funcs[i](args);
-            
-            if (status == -1)  // shell_exit a retourné -1
-                return (-1);    // Propager le signal au main
-            
-            return (0);  // Builtin exécuté avec succès
-        }
+        shell_exit(args);  // Ne retourne jamais
+    }
+    
+    if (_strcmp(args[0], "env") == 0)
+    {
+        shell_env(args);
+        return (0);
     }
     
     return (1);  // Pas un builtin
