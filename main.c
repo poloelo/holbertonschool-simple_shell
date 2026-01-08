@@ -8,6 +8,7 @@
  *
  * Return: Status of execution
  */
+
 int process_line(char *line, char **av, int line_count)
 {
 	char **args = NULL;
@@ -37,6 +38,8 @@ int process_line(char *line, char **av, int line_count)
 	status = execute_command(args, av[0], line_count);
 	free_array(args);
 
+	last_status = status;  /* ← AJOUTE CETTE LIGNE */
+
 	return (status);
 }
 
@@ -50,6 +53,7 @@ int process_line(char *line, char **av, int line_count)
 int main(int ac, char **av)
 {
 	char *line = NULL;
+int last_status = 0;  /* Variable globale */
 	int status = 0;
 	int line_count = 0;
 	(void)ac;

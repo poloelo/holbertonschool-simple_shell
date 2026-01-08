@@ -9,7 +9,7 @@
 int shell_exit(char **args)
 {
 	(void)args;
-	exit(0);
+	exit(last_status);  /* ← Quitte avec le dernier statut */
 }
 
 /**

@@ -13,6 +13,7 @@
 #define MAX_INPUT 1024
 #define MAX_ARGS 64
 
+extern int last_status;  /* Dernier code de sortie */
 extern char **environ;
 
 /* Main shell functions */
