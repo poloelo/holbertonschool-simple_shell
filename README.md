@@ -88,3 +88,4 @@ See the AUTHORS file for a list of contributors to this project.
 ## Acknowledgments
 
 This project is part of the Holberton School curriculum.
+

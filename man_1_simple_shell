@@ -1,47 +1,96 @@
-
----
-
-## 2️⃣ Man page (man_1_simple_shell)
-
-👉 Objectif : permettre `man ./man_1_simple_shell`
-
-📄 **`man_1_simple_shell`**
-
-```man
-.TH SIMPLE_SHELL 1 "December 2025" "Holberton School" "Simple Shell Manual"
+.TH HSH 1 "December 2024" "Version 1.0" "Simple Shell Manual"
 
 .SH NAME
-simple_shell \- simple UNIX command interpreter
+hsh \- simple command line interpreter
 
 .SH SYNOPSIS
 .B hsh
+[command_file]
 
 .SH DESCRIPTION
-Simple Shell est un interpréteur de commandes UNIX minimal.
-Il permet d’exécuter des commandes entrées par l’utilisateur
-en utilisant les appels système UNIX standards.
+.B hsh
+is a simple UNIX command interpreter that reads commands from either a file or standard input and executes them.
 
-Le shell fonctionne en mode interactif et non interactif.
+.SH INVOCATION
+.B hsh
+can be invoked both interactively and non-interactively. If
+.B hsh
+is invoked with standard input connected to a terminal, an interactive shell is opened. When
+.B hsh
+is invoked with standard input not connected to a terminal, it reads and executes commands in the order they are received.
 
-.SH USAGE
+.SH COMMAND EXECUTION
+After receiving a command,
+.B hsh
+tokenizes it into words using spaces as delimiters. The first word is considered the command and all remaining words are considered arguments to that command. 
+.B hsh
+then proceeds with the following actions:
+
+.RS
+1. If the first character of the command is a slash (/) or dot (.), the shell attempts to execute the command directly.
+.RE
+
+.RS
+2. Otherwise, the shell searches for the command in the directories specified in the PATH environment variable.
+.RE
+
+.RS
+3. If the command is found, the shell forks a child process and executes the command.
+.RE
+
+.RS
+4. If the command is not found, an error message is printed.
+.RE
+
+.SH BUILT-IN COMMANDS
+The following built-in commands are supported:
+
+.TP
+.B exit
+Exit the shell.
+
+.TP
+.B env
+Print the current environment variables.
+
+.SH ENVIRONMENT
+.TP
+.B PATH
+The search path for commands. It is a colon-separated list of directories in which the shell looks for commands.
+
+.SH EXIT STATUS
+The shell returns the exit status of the last command executed. If a command is not found, the return status is 127.
+
+.SH EXAMPLES
 Interactive mode:
 .RS
-./hsh
+.nf
+$ ./hsh
+$ /bin/ls
+hsh main.c shell.c
+$ ls
+hsh main.c shell.c
+$ exit
+$
+.fi
 .RE
 
 Non-interactive mode:
 .RS
-echo "/bin/ls" | ./hsh
+.nf
+$ echo "/bin/ls" | ./hsh
+hsh main.c shell.c
+$ echo "ls" | ./hsh
+hsh main.c shell.c
+.fi
 .RE
 
-.SH EXIT STATUS
-Retourne 0 en cas de succès.
-Retourne un code d’erreur approprié en cas d’échec.
-
-.SH ENVIRONMENT
-PATH
-Utilisé pour localiser les exécutables.
+.SH BUGS
+No known bugs.
 
 .SH AUTHORS
-Paul Gioria  
-Ndeye Fatou Samb
+See AUTHORS file.
+
+.SH SEE ALSO
+sh(1), bash(1)
+
